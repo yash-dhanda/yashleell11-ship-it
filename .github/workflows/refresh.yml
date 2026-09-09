@@ -1,0 +1,49 @@
+name: refresh stats
+
+on:
+  schedule:
+    # 06:00 UTC daily. The window stats.py asks for is pinned to whole UTC
+    # days, so the exact minute this runs does not change the output.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/stats.py"
+      - ".github/workflows/refresh.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-stats
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # No pip install: stats.py is standard library only, on purpose. A
+      # dependency here is a dependency that can break the profile at 06:00
+      # with nobody watching.
+      - name: Draw the graphics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 tools/stats.py --login "${{ github.repository_owner }}"
+
+      - name: Commit only if something actually changed
+        run: |
+          if git diff --quiet -- assets; then
+            echo "no change; not committing"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets
+          git commit -m "chore: refresh stats for $(date -u +%Y-%m-%d)"
+          git push

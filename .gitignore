@@ -1,0 +1,5 @@
+# Local portrait pipeline only. The source photo and the ~176 MB cut-out model
+# output stay off GitHub; the committed SVG is the deliverable.
+build/
+.venv/
+__pycache__/

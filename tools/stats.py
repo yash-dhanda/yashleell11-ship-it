@@ -163,15 +163,18 @@ def streaks(days: list[tuple[str, int]]) -> tuple[dict, dict]:
                 best = {"len": run, "start": start, "end": date}
         else:
             run, start = 0, None
-    # the current streak must run to the final day of the window
+    # the current streak must run to the final day of the window. The action
+    # runs at 06:00 UTC, before most of "today" has happened, so an empty final
+    # day is still in progress - it does not break the streak, it just isn't in it.
+    tail = days[:-1] if days and days[-1][1] == 0 else days
     run, start = 0, None
-    for date, n in reversed(days):
+    for date, n in reversed(tail):
         if n > 0:
             run += 1
             start = date
         else:
             break
-    cur = {"len": run, "start": start, "end": days[-1][0] if run else None}
+    cur = {"len": run, "start": start, "end": tail[-1][0] if run else None}
     return cur, best
 
 
@@ -198,6 +201,11 @@ def hero(user: dict, t: dict) -> str:
     days = flat_days(user)
     total = user["contributionsCollection"]["contributionCalendar"]["totalContributions"]
     weeks = [sum(n for _, n in days[i:i + 7]) for i in range(0, len(days), 7)]
+    # a young account is months of flat line before the first commit; start the
+    # sparkline at the first active week (the year grid below keeps the full year)
+    lead = next((i for i, v in enumerate(weeks) if v), 0)
+    lead = min(lead, max(len(weeks) - 12, 0))
+    weeks, first = weeks[lead:], days[lead * 7][0]
     W, H = 880, 132
     b = [f'<text x="0" y="20" font-size="11" class="m">contributions, last 365 days</text>',
          f'<text x="0" y="62" font-size="38">{total:,}</text>',
@@ -215,7 +223,7 @@ def hero(user: dict, t: dict) -> str:
     b.append(f'<line x1="{x0}" y1="{y0 + gh + .5}" x2="{W}" y2="{y0 + gh + .5}" '
              f'stroke="{t["rule"]}"/>')
     b.append(f'<text x="{x0}" y="{y0 + gh + 18}" font-size="10" class="m">'
-             f'{pretty(days[0][0])}</text>')
+             f'{pretty(first)}</text>')
     b.append(f'<text x="{W}" y="{y0 + gh + 18}" font-size="10" class="m" '
              f'text-anchor="end">{pretty(days[-1][0])}</text>')
     return frame(W, H, f"{total} contributions in the last 365 days", "".join(b), t)
@@ -300,7 +308,7 @@ CARDS = {"hero": hero, "streak": streak_card, "langs": langs_card, "year": year_
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--login", default="yashleell11-ship-it")
+    ap.add_argument("--login", default="yash-dhanda")
     ap.add_argument("--fixture", default="", help="local JSON instead of the API")
     args = ap.parse_args()
 

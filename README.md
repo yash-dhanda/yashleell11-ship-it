@@ -15,15 +15,20 @@
   <img src="assets/h-building-light.svg" width="880" alt="building">
 </picture>
 
-**[ManhwaManiacs](https://github.com/yashleell11-ship-it/ManhwaManiacs)** — a reader platform that keeps every page on<br>
+**[ManhwaManiacs](https://github.com/yash-dhanda/ManhwaManiacs)** — a reader platform that keeps every page on<br>
 hardware you own. Real multi-user auth with per-profile isolation, and<br>
 web, Android and iOS all ship out of one repository.<br>
 <samp>python · fastapi · flutter · docker · caddy</samp>
 
-**[recall](https://github.com/yashleell11-ship-it/recall)** — turns course PDFs into flashcards it verifies before you<br>
+**[recall](https://github.com/yash-dhanda/recall)** — turns course PDFs into flashcards it verifies before you<br>
 ever see them, then schedules them against a model of how you actually<br>
 forget rather than a fixed interval.<br>
 <samp>python · sqlite · llm</samp>
+
+**[Elizabeth](https://github.com/yash-dhanda/neiro)** — a voice companion that runs on my laptop and hears<br>
+*how* you sound, not just what you said. Prosody is scored against your own<br>
+baseline and one emotional state drives both her voice and her face.<br>
+<samp>python · pytorch · faster-whisper · kokoro · fastapi</samp>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/h-activity-dark.svg">

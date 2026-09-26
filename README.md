@@ -15,6 +15,12 @@
   <img src="assets/h-building-light.svg" width="880" alt="building">
 </picture>
 
+**[WaitWise](https://github.com/getwaitwise/waitwise)** — take a token, leave the line. Built at Web-a-thon 2.0 with<br>
+[Raghav](https://github.com/Raghav2477) and [Satyam](https://github.com/singhsatyam3829): tokens, appointments, a live queue and counter<br>
+assignment on web, phone and a TV board, with ML wait-time prediction and<br>
+announcements in Hindi and Punjabi. Live at [lpu.lol](https://lpu.lol).<br>
+<samp>typescript · next.js · expo · fastapi · supabase · postgres</samp>
+
 **[ManhwaManiacs](https://github.com/yash-dhanda/ManhwaManiacs)** — a reader platform that keeps every page on<br>
 hardware you own. Real multi-user auth with per-profile isolation, and<br>
 web, Android and iOS all ship out of one repository.<br>
